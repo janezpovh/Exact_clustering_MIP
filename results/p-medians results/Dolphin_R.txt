@@ -1,0 +1,68 @@
+read.table("dolphin_edge.txt") -> Dolphin_edge
+
+library(igraph)
+library(lpSolve)
+
+graph_from_edgelist(as.matrix(Dolphin_edge),directed = FALSE) -> DolphinGragh
+
+as.matrix(distances(DolphinGragh)) -> DolphinDistance
+
+Cl_assign <- matrix(sign(1:msize*10)-1,nrow=10,ncol=msize)
+Cl_obj <- sign(1:10)-1
+
+msize = length(DolphinDistance[1,])
+
+colnum = msize*(msize+1)
+rownum = msize*(msize+1)+1
+
+LP_obj <- c(as.vector(DolphinDistance),sign(1:msize)-1)
+
+LP_constr_mat <- matrix(sign(1:colnum*rownum)-1,nrow=rownum,ncol=colnum)
+
+for (i in 1:msize)
+{
+for (j in 1:msize)
+{
+LP_constr_mat[i,(i-1)*msize+j]=1
+LP_constr_mat[msize+(i-1)*msize+j,(i-1)*msize+j]=1
+LP_constr_mat[msize+(i-1)*msize+j,msize*msize+j]=-1
+}
+LP_constr_mat[rownum,msize*msize+i]=1
+}
+
+LP_b <- c(sign(1:msize),sign(1:(msize*msize))-1,kl_num)
+LP_rel <-  c("=","<=")[c(sign(1:msize),sign(1:(msize*msize))+1,1)]
+
+LP_int <- ((msize*msize)+1):(msize*(msize+1))
+
+
+
+for (cluster_i in 1:10)
+{
+
+kl_num=cluster_i
+
+LP_b <- c(sign(1:msize),sign(1:(msize*msize))-1,kl_num)
+
+lp("min",LP_obj,LP_constr_mat,LP_rel,LP_b,transpose.constraints = TRUE,LP_int,presolve=0, compute.sens=0,LP_int) -> KMED
+
+as.integer(round(KMED$solution,0)) -> KMED_sol
+
+KMED_kl <- 1:msize
+
+for (i in 1:msize)
+{
+for (j in 1:msize)
+{
+if (KMED_sol[(i-1)*msize+j]==1)
+{
+KMED_kl[i] <- j
+}
+}
+}
+
+KMED_kl -> Cl_assign[cluster_i,]
+KMED$objval -> Cl_obj[cluster_i]
+
+}
+
