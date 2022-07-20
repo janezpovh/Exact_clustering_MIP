@@ -1,3 +1,4 @@
+
 # Solution for model OBJ
 # Objective value = 1.3866842105293395e+02
 z10_1 0
