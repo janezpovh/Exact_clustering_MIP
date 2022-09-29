@@ -74,13 +74,13 @@ path_c = "results\\Optimum_clusterings"
 path_g="data\\networks\\"
 
 # data political books
-optim_clustering="polBooks_exact_clustering.txt"
-exact_clustering="polBooks_k_3.txt"
+optim_clustering="polBooks_ground_truth_clustering.txt"
+exact_clustering="polBooks_cl2.txt"
 data_set="Political books.txt"
 
 # data karate
-optim_clustering="karate_exact_clustering.txt"
-exact_clustering="karate_k_2.txt"
+optim_clustering="karate_ground_truth_clustering.txt"
+exact_clustering="karate_cl10.txt"
 data_set="karate.txt"
 
 # load graph

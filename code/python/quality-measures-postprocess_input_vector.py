@@ -71,8 +71,9 @@ path_c = "results\\Optimum_clusterings"
 path_g="data\\networks\\"
 
 # data political books
-optim_clustering="polBooks_exact_clustering.txt"
-exact_clustering="polBooks_k_3.txt"
+
+optim_clustering="polBooks_ground_truth_clustering.txt"
+exact_clustering="polBooks_cl6.txt"
 data_set="Political books.txt"
 
 
